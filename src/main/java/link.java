@@ -1,7 +1,7 @@
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class link {
+public class link implements Comparable<link>{
     private int id;
     private String link1;
     private String link2;
@@ -33,6 +33,27 @@ public class link {
 
     public String getDate() {
         return date;
+    }
+
+    public void setLink1(String link1)
+    {
+        this.link1 = link1;
+    }
+
+    public void setLink2(String link2)
+    {
+        this.link2 = link2;
+    }
+
+    public void setDate(String date)
+    {
+        this.date = date;
+    }
+
+    @Override
+    public int compareTo(link other)
+    {
+        return this.link1.compareTo(other.link1);
     }
 
     @Override
