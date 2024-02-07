@@ -1,27 +1,29 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.format.DateTimeFormatter;
 public class main {
 
-    private static boolean print = false;
+    private static boolean print_cont = false;
 
     public static link parse_args(String[] args)
     {
 
         String link1 = "";
         String link2 = "";
-        String date = "";
+
+        LocalDate date_now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+        String date = date_now.format(formatter);
+        date += " (" + date_now.getDayOfWeek().toString() + ")";
+
         for(String arg : args)
         {
             if(arg.contains("--print"))
             {
-                print = true;
-                if(args.length == 1)
-                {
-                    return null;
-                }
-                continue;
+                print_cont = true;
             }
 
             else if(link1.equals(""))
@@ -34,25 +36,39 @@ public class main {
                 link2 = arg;
             }
         }
-        link new_link = new link(0, link1, link2, "TBD");
-        System.out.println(new_link);
-        return new_link;
+        if(!link1.isEmpty())
+            return new link(0, link1, link2, date.toString());
+
+        return null;
     }
 
     public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Usage: java main [--print] link1 [link2]");
+        }
+
         jsonTools tool = new jsonTools();
         List<link> links = tool.read_json();
 
         link new_link = parse_args(args);
-        if(new_link == null)
+
+        if(new_link != null)
         {
-            int filler;
-            //print("PRINT ALL LINKS HERE");
-        }else {
-            if(!check_valid_link(links, new_link))//link already exists in the file!
+
+            if (!check_valid_link(links, new_link))//link already exists in the file!
             {
-                int filler;
+
+                System.out.println("You already applied for this job!");
+            } else {
+                links.add(new_link);
+                tool.write_json(links);
             }
+
+        }
+
+        if (print_cont) //only print
+        {
+            print_all(links);
         }
 
 
@@ -64,11 +80,26 @@ public class main {
     {
         for(link other_link: links)
         {
-            if(new_link.compareTo(other_link) != 0)
+            if(new_link.compareTo(other_link) == 0)
             {
                 return false;
             }
         }
         return true;
+    }
+
+    public static void print_all(List<link> links)
+    {
+        if(links.isEmpty()){
+            System.out.println("You haven't applied for any jobs!");
+            return;
+        }
+
+        System.out.println("-----------------------");
+        for(link job: links)
+        {
+            System.out.println(job);
+            System.out.println("-----------------------");
+        }
     }
 }

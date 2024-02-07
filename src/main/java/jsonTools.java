@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class jsonTools {
-    private File main_file = new File("data.json");
-    public List<link> write_json(link new_link)
+    private final File main_file = new File("data.json");
+    public void write_json(List<link> links)
     {
-        List<link> links = read_json();
-        links.add(new_link);
+
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.writeValue(main_file, links);
@@ -20,8 +19,6 @@ public class jsonTools {
             System.out.println("Error occured. \n" + e);
             System.exit(1);
         }
-
-        return links;
     }
     public List<link> read_json()
     {
@@ -44,4 +41,6 @@ public class jsonTools {
         return new ArrayList<>();
 
     }
+
+    public void 
 }

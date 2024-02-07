@@ -59,8 +59,8 @@ public class link implements Comparable<link>{
     @Override
     public String toString()
     {
-        String link2_check = this.link2.equals("") ? "Unavailable" : this.link2;
+        String link2_check = this.link2.equals("") ? "" : "Secondary link:" + this.link2 + "\n";
 
-        return String.format("Num: %d\nLink: %s\nSecondary link: %s\nDate: %s\n", this.id, this.link1, link2_check, this.date);
+        return String.format("Num: %d\nLink: %s\n%sDate: %s", this.id, this.link1, link2_check, this.date);
     }
 }
