@@ -7,6 +7,12 @@ import java.util.List;
 
 public class jsonTools {
     private static final File main_file = new File("data.json");
+
+    @FunctionalInterface
+    public interface JsonOperation<T> {
+        T perform(ObjectMapper objectMapper) throws Exception;
+    }
+
     private static class ObjectMap
     {
         ObjectMapper objectMapper;
@@ -25,49 +31,49 @@ public class jsonTools {
         }
     }
 
-    public void write_json(List<link> links)
+    public <T>T performJsonOperation(JsonOperation<T> op)
     {
-
         ObjectMap obj = new ObjectMap();
         ObjectMapper objectMapper = obj.getObjectMapper();
-
         try {
-            objectMapper.writeValue(main_file, links);
-            System.out.println("JSON written to file successfully.");
+            return op.perform(objectMapper);
         }catch(Exception e)
         {
             System.out.println("Error occured. \n" + e);
             System.exit(1);
         }
+        return null;
     }
+
+    public void write_json(List<link> links)
+    {
+        performJsonOperation(objectMapper -> {
+            objectMapper.writeValue(main_file,links);
+            System.out.println("JSON written to file successfully.");
+            return null;
+        });
+    }
+
     public List<link> read_json()
     {
-        ObjectMap obj = new ObjectMap();
-        ObjectMapper objectMapper = obj.getObjectMapper();
+        List<link> links = performJsonOperation(objectMapper ->{
+                    return objectMapper.readValue(main_file, new TypeReference<List<link>>() {});
+                });
 
-        try {
-            return objectMapper.readValue(main_file, new TypeReference<List<link>>() {});
-        }
-        catch(Exception e)
+        if(links == null)
         {
-            System.out.println("Error occured. \n" + e);
-            System.exit(1);
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+        return links;
 
     }
 
     public void delete_all()
     {
-
-        ObjectMap obj = new ObjectMap();
-        ObjectMapper objectMapper = obj.getObjectMapper();
-        try {
+        performJsonOperation(objectMapper -> {
             objectMapper.writeValue(main_file, new ArrayList<>()); //replace whole file with []
-        }catch(Exception e)
-        {
-            System.out.println("Error occured. \n" + e);
-            System.exit(1);
-        }
+            return null;
+        });
+
     }
 }

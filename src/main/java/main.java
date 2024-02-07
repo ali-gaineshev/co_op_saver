@@ -19,6 +19,7 @@ public class main {
         String date = date_now.format(formatter);
         date += " (" + date_now.getDayOfWeek().toString() + ")";
 
+
         for(String arg : args)
         {
             if(arg.contains("--print"))
@@ -37,7 +38,7 @@ public class main {
             }
         }
         if(!link1.isEmpty())
-            return new link(0, link1, link2, date.toString());
+            return new link(0, link1, link2, date);
 
         return null;
     }
@@ -48,6 +49,7 @@ public class main {
         }
 
         jsonTools tool = new jsonTools();
+        //tool.delete_all(); //TEST
         List<link> links = tool.read_json();
 
         link new_link = parse_args(args);
@@ -71,7 +73,7 @@ public class main {
             print_all(links);
         }
 
-        //tool.delete_all();
+
     }
 
 
