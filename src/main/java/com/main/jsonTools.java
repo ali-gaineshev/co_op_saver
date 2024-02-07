@@ -1,17 +1,17 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
+package com.main;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class jsonTools {
     private static final File main_file = new File("data.json");
 
-    @FunctionalInterface
-    public interface JsonOperation<T> {
-        T perform(ObjectMapper objectMapper) throws Exception;
-    }
+
 
     private static class ObjectMap
     {
@@ -33,8 +33,9 @@ public class jsonTools {
 
     public <T>T performJsonOperation(JsonOperation<T> op)
     {
-        ObjectMap obj = new ObjectMap();
+        ObjectMap obj = new ObjectMap(); //object mapper that performs actions
         ObjectMapper objectMapper = obj.getObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT); //pretty writer
         try {
             return op.perform(objectMapper);
         }catch(Exception e)
@@ -56,9 +57,10 @@ public class jsonTools {
 
     public List<link> read_json()
     {
-        List<link> links = performJsonOperation(objectMapper ->{
-                    return objectMapper.readValue(main_file, new TypeReference<List<link>>() {});
-                });
+        List<link> links = performJsonOperation(objectMapper ->
+                    objectMapper.readValue(main_file, new TypeReference<>() {})
+        );
+
 
         if(links == null)
         {

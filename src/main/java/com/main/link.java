@@ -1,8 +1,9 @@
+package com.main;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class link implements Comparable<link>{
-    private int id;
+    private final int id;
     private String link1;
     private String link2;
     private String date;

@@ -1,10 +1,8 @@
-import java.util.ArrayList;
+package com.main;
 import java.util.List;
-import java.util.Map;
 import java.time.LocalDate;
-import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
-public class main {
+public class Main {
 
     private static boolean print_cont = false;
 
