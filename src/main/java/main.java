@@ -71,7 +71,7 @@ public class main {
             print_all(links);
         }
 
-
+        //tool.delete_all();
     }
 
 
